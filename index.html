@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        html, body {
+            width:  100%;
+            height: 100%;
+            margin: 0px;
+        }
+        div.container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        div.name {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="name">Andy Bolton</div>
+        <canvas id="canvas"></canvas>
+    </div>
+    <script>
+        function Beer() {
+            this.id = 0;
+            this.speedFactor = 0;
+            this.x = 0;
+            this.y = 0;
+        }
+        var beers = [];
+        var totalBeers = 6;
+        var speedFactors = 8;
+        var spliceIndices = [];
+
+        // var dimension = [document.documentElement.clientWidth, document.documentElement.clientHeight];
+        var c = document.getElementById("canvas");
+        c.width  = window.innerWidth;
+        c.height = window.innerHeight;
+        // c.width = dimension[0];
+        // c.height = dimension[1];
+        x = c.width;
+        y = c.height;
+
+        var beerImage = new Image();
+        var height = y;
+        var width = x;
+
+        function init() {
+            beerImage.src = 'beer2.png';
+            window.requestAnimationFrame(draw);
+        }
+
+        function draw() {
+            for (var i = 0; i <= totalBeers; i++) {
+                if (beers[i] && beers[i].y < -200) {
+                    beers.splice(i, 1);
+                }
+
+                var existingBeer = beers.filter(function(drink) {
+                    return drink.id == i;
+                });
+                if (!existingBeer.length) {
+                    var beer = new Beer();
+                    beer.id = i;
+                    beer.speedFactor = getRandomInt(1, speedFactors + 1);
+                    beer.x = getRandomInt(1, window.innerWidth);
+                    beer.y = window.height;
+                    beers.push(beer);
+                } else {
+                    continue;
+                }
+            }
+
+            var ctx = document.getElementById('canvas').getContext('2d');
+            ctx.canvas.width  = window.innerWidth;
+            ctx.canvas.height = window.innerHeight;
+            // ctx.globalCompositeOperation = 'destination-over';
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clear canvas
+
+            // beer
+            for (var i = 0; i < totalBeers; i++) {
+                beers[i].y = beers[i].y - (10 / beers[i].speedFactor);
+                ctx.drawImage(beerImage, beers[i].x, beers[i].y);
+
+                
+            }
+
+            if (spliceIndices.length) {
+                for (var i = 0; i < spliceIndices.length; i++) {
+                    beers.splice(spliceIndices[i], 1);
+                }   
+            }
+
+            spliceIndices = [];
+
+            window.requestAnimationFrame(draw);
+        }
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
