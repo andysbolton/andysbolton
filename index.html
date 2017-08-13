@@ -6,6 +6,7 @@
             width:  100%;
             height: 100%;
             margin: 0px;
+            cursor: url("point.png"), auto;
         }
         div.container {
             display: flex;
@@ -16,11 +17,18 @@
         div.name {
             position: absolute;
         }
+        .smaller {
+            font-size: .8em;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="name">Andy Bolton</div>
+        <div class="name">
+            Andy Bolton 
+            <div class="smaller">software engineer</div>
+            <div class="smaller">denver</div>
+        </div>
         <canvas id="canvas"></canvas>
     </div>
     <script>
@@ -30,17 +38,21 @@
             this.x = 0;
             this.y = 0;
         }
+        
         var beers = [];
-        var totalBeers = 6;
-        var speedFactors = 8;
-        var spliceIndices = [];
+        var totalBeers = 8;
+        var speedFactors = 6;
 
-        // var dimension = [document.documentElement.clientWidth, document.documentElement.clientHeight];
+        // rotate .02 degrees on draw
+        var degree = .02 * Math.PI / 180;
+		var rotated = degree;
+        // max left/right rotate is .4 degrees
+        var maxRotate = 0.4 * Math.PI / 180;
+
         var c = document.getElementById("canvas");
-        c.width  = window.innerWidth;
+        c.width = window.innerWidth;
         c.height = window.innerHeight;
-        // c.width = dimension[0];
-        // c.height = dimension[1];
+        
         x = c.width;
         y = c.height;
 
@@ -54,47 +66,53 @@
         }
 
         function draw() {
-            for (var i = 0; i <= totalBeers; i++) {
+            for (var i = 0; i < totalBeers; i++) {
                 if (beers[i] && beers[i].y < -200) {
                     beers.splice(i, 1);
                 }
-
-                var existingBeer = beers.filter(function(drink) {
-                    return drink.id == i;
+                var existingBeer = beers.filter((s) => {
+                    return s.id == i;
                 });
                 if (!existingBeer.length) {
                     var beer = new Beer();
                     beer.id = i;
                     beer.speedFactor = getRandomInt(1, speedFactors + 1);
                     beer.x = getRandomInt(1, window.innerWidth);
-                    beer.y = window.height;
+                    beer.y = window.innerHeight;
                     beers.push(beer);
                 } else {
                     continue;
                 }
             }
 
-            var ctx = document.getElementById('canvas').getContext('2d');
-            ctx.canvas.width  = window.innerWidth;
-            ctx.canvas.height = window.innerHeight;
-            // ctx.globalCompositeOperation = 'destination-over';
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clear canvas
-
-            // beer
+            var context = document.getElementById('canvas').getContext('2d');
+            context.canvas.width  = window.innerWidth;
+            context.canvas.height = window.innerHeight;
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // clear canvas         
+                    
             for (var i = 0; i < totalBeers; i++) {
-                beers[i].y = beers[i].y - (10 / beers[i].speedFactor);
-                ctx.drawImage(beerImage, beers[i].x, beers[i].y);
+                if (!beers[i]) {
+                    continue;
+                }
 
-                
+                context.rotate(rotated);
+            
+                beers[i].y -= beers[i].speedFactor;
+
+                context.drawImage(beerImage, beers[i].x, beers[i].y);
+
+                context.rotate(-rotated);
             }
 
-            if (spliceIndices.length) {
-                for (var i = 0; i < spliceIndices.length; i++) {
-                    beers.splice(spliceIndices[i], 1);
-                }   
+            rotated += degree;
+
+            if (rotated < -maxRotate) {
+                degree *= -1;
             }
 
-            spliceIndices = [];
+            if (rotated > maxRotate) {
+                degree *= -1;
+            }
 
             window.requestAnimationFrame(draw);
         }
