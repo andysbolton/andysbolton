@@ -1,34 +1,40 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <style>
-        html, body {
-            width:  100%;
+        html,
+        body {
+            width: 100%;
             height: 100%;
             margin: 0px;
             cursor: url("point.png"), auto;
         }
+
         div.container {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
         }
+
         div.name {
             position: absolute;
         }
+
         .smaller {
             font-size: .8em;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <div class="name">
-            Andy Bolton 
+        <!--<div class="name">
+            Andy Bolton
             <div class="smaller">software engineer</div>
             <div class="smaller">denver</div>
-        </div>
+        </div>-->
         <canvas id="canvas"></canvas>
     </div>
     <script>
@@ -38,23 +44,23 @@
             this.x = 0;
             this.y = 0;
         }
-        
+
         var beers = [];
-        var totalBeers = 8;
-        var speedFactors = 6;
+        var totalBeers = 100;
+        var speedFactors = 0;
 
         // rotate .02 degrees on draw
-        var degree = .02 * Math.PI / 180;
-		var rotated = degree;
+        var degree = .01 * Math.PI / 180;
+        var rotated = degree;
         // max left/right rotate is .4 degrees
-        var maxRotate = 0.4 * Math.PI / 180;
+        var maxRotate = 180 * Math.PI / 180;
 
         var c = document.getElementById("canvas");
         c.width = window.innerWidth;
         c.height = window.innerHeight;
-        
-        x = c.width;
-        y = c.height;
+
+        var x = c.width;
+        var y = c.height;
 
         var beerImage = new Image();
         var height = y;
@@ -86,23 +92,28 @@
             }
 
             var context = document.getElementById('canvas').getContext('2d');
-            context.canvas.width  = window.innerWidth;
+            context.canvas.width = window.innerWidth;
             context.canvas.height = window.innerHeight;
-            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // clear canvas         
-                    
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // clear canvas  
+
             for (var i = 0; i < totalBeers; i++) {
                 if (!beers[i]) {
                     continue;
                 }
 
+                beers[i].y -= 1; //beers[i].speedFactor;
+
+                context.translate(context.canvas.width / 2 + beerImage.width / 2, context.canvas.height / 2 + beerImage.height / 2);
+
                 context.rotate(rotated);
-            
-                beers[i].y -= beers[i].speedFactor;
 
-                context.drawImage(beerImage, beers[i].x, beers[i].y);
+                context.drawImage(beerImage, 0, 0);
 
-                context.rotate(-rotated);
+                context.translate(-context.canvas.width / 2 + -beerImage.width / 2, -context.canvas.height / 2 + -beerImage.height / 2);
+
+
             }
+
 
             rotated += degree;
 
