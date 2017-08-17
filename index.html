@@ -48,15 +48,18 @@
         var rotated = degree;
         // max left/right rotate is 15 degrees
         var maxRotate = 15 * Math.PI / 180;
-
-        var c = document.getElementById("canvas");
-        c.width = window.innerWidth;
-        c.height = window.innerHeight;
         
         var beerImage = new Image();
+        var beerWidth = 0;
+        var beerHeight = 0;
+
+        beerImage.onload = () => {
+            beerWidth = beerImage.width / 2;
+            beerHeight = beerImage.height / 2;
+        }
 
         function init() {
-            beerImage.src = 'beer2.png';
+            beerImage.src = 'beer2.png';        
             window.requestAnimationFrame(draw);
         }
 
@@ -66,17 +69,15 @@
                     beers.splice(i, 1);
                 }
                 var existingBeer = beers.filter((s) => {
-                    return s.id == i;
+                    return s.id === i;
                 });
                 if (!existingBeer.length) {
                     var beer = new Beer();
                     beer.id = i;
                     beer.speedFactor = getRandomInt(1, speedFactors + 1);
-                    beer.x = getRandomInt(1, window.innerWidth);
+                    beer.x = getRandomInt(1 + beerWidth, window.innerWidth - beerWidth);
                     beer.y = window.innerHeight;
                     beers.push(beer);
-                } else {
-                    continue;
                 }
             }
 
@@ -97,10 +98,9 @@
                 
                 context.rotate(rotated);
             
-                context.drawImage(beerImage, -beerImage.width / 2, -beerImage.height / 2);
+                context.drawImage(beerImage, -beerWidth, -beerHeight);
                 context.restore();
             }
-
 
             rotated += degree;
 
