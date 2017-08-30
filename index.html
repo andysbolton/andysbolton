@@ -1,33 +1,63 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <style>
-        html, body {
-            width:  100%;
+        html,
+        body {
+            width: 100%;
             height: 100%;
             margin: 0px;
-            cursor: url("point.png"), auto;
+            /*cursor: url("point.png"), auto;*/
         }
-        div.container {
+
+        .container {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            overflow: hidden;
+            text-align: center;
         }
-        div.name {
+
+        .abs {
             position: absolute;
         }
+
         .smaller {
             font-size: .8em;
         }
+
+        .let {
+            display: inline-block;
+        }
+
+        .city-let {
+            display: inline-block;
+        }
+
+        img {
+            z-index: -12341341;
+        }
+        .small-marg {
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <div class="name">
-            Andy Bolton 
-            <div class="smaller">software engineer</div>
-            <div class="smaller">denver</div>
+        <div class="abs">
+            <div>
+                <img src="pass.gif" />
+            </div>
+            <div class="let">A</div><div class="let">n</div><div class="let">d</div><div class="let">y</div>
+            <div class="let">B</div><div class="let">o</div><div class="let">l</div><div class="let">t</div><div class="let">o</div><div class="let">n</div>
+            <div class="smaller link"><a href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
+            <div class="smaller city"><div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div></div>
+            <div class="small-marg">
+                <img src="key.gif" width="200" />
+            </div>
         </div>
         <canvas id="canvas"></canvas>
     </div>
@@ -38,9 +68,15 @@
             this.x = 0;
             this.y = 0;
         }
-        
+
+        var context = document.getElementById('canvas').getContext('2d');
+        var link = document.getElementsByClassName("link")[0];
+        var city = document.getElementsByClassName("city")[0];
+        var letters = document.getElementsByClassName("let");
+        var cityLetters = document.getElementsByClassName("city-let");
+
         var beers = [];
-        var totalBeers = 8;
+        var totalBeers = 4;
         var speedFactors = 6;
 
         // rotate .33 degrees on draw
@@ -48,7 +84,7 @@
         var rotated = degree;
         // max left/right rotate is 15 degrees
         var maxRotate = 15 * Math.PI / 180;
-        
+
         var beerImage = new Image();
         var beerWidth = 0;
         var beerHeight = 0;
@@ -58,9 +94,128 @@
             beerHeight = beerImage.height / 2;
         }
 
+        function getCursorPosition(canvas, event) {
+            var rect = canvas.getBoundingClientRect();
+            var x = event.clientX - rect.left;
+            var y = event.clientY - rect.top;
+
+            var existingBeer = beers.filter((s) => {
+                return (s.x >= x - beerWidth && s.x <= x + beerWidth) &&
+                    (s.y > y - beerHeight && s.y <= y + beerHeight);
+            });
+
+            if (existingBeer.length) {
+                alert(existingBeer.x);
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
         function init() {
-            beerImage.src = 'beer2.png';        
+            beerImage.src = 'beer2.png';
             window.requestAnimationFrame(draw);
+            document.addEventListener("click", (e) => {
+                getCursorPosition(context.canvas, e);
+            });
+
+            document.addEventListener("nameDone", (e) => {
+                rotateHorizontal(link, 0);
+            });
+
+            performAnimation();        
+        }
+
+        async function performAnimation() { 
+            var waitList = [];
+
+            for (var i = 0; i < letters.length / 2; i++) {
+                var letterBegin = letters[i];
+                var letterEnd = letters[letters.length - 1 - i];
+                waitList.push(skew(letterBegin, true));
+                waitList.push(skew(letterEnd, false));
+                await sleep(500);
+            }
+            
+            Promise.all(waitList).then(() => {
+                rotateHorizontal();
+            });  
+        }
+
+        async function skew(letterClass, skewRight) {
+            return new Promise(async (resolve) => {
+                var degrees = 0;
+                while (degrees < 360) {
+                    degrees++;
+                    var radians = degrees * Math.PI / 180;
+
+                    xPath = Math.cos(-radians) * 125 - 125;
+                    yPath = Math.sin(-radians) * 250;
+
+                    if (skewRight) {
+                        xPath = -xPath;
+                    }
+
+                    letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
+                    await sleep(10);
+                }
+
+                letterClass.style.transform = `translate(0px, 0px)`;
+                resolve();
+            });
+        }
+
+        async function rotateHorizontal() {
+            var degrees = 0;
+            while (degrees < 360) {
+                degrees++;
+
+                link.style.transform = `rotate3d(0, 1, 0, ${degrees}deg)`;
+                // skew(${degrees * Math.PI / 180}deg, ${degrees}deg)
+                await sleep(5);
+            }
+
+            var waitList = [];
+
+            for (var i = 0; i < cityLetters.length; i++) {
+                if (i % 2 === 0) {
+                    waitList.push(upDown(cityLetters[i], false));
+                } else {
+                    waitList.push(upDown(cityLetters[i], true))
+                }
+                await sleep(250);
+            }
+
+            Promise.all(waitList).then(() => {
+                performAnimation();
+            });
+        }
+
+        async function upDown(cityLetClass, downFirst) {
+            return new Promise(async (resolve) => {
+                var up = 1;
+                var rotate = 11.25;
+                if (downFirst) {
+                    up *= -1;
+                }
+                while (up < 16) {
+                    up++;
+                    rotate += 11.25;
+                    cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 1, 0, ${rotate}deg)`;
+                    await sleep(10);
+                }
+
+                 while (up > 0) {
+                    up--;
+                    rotate += 11.25;
+                    cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 0, 1, ${rotate}deg)`;
+                    await sleep(10);
+                }
+
+                cityLetClass.style.transform = `translate(0px, 0px)`;
+                resolve();
+            });
         }
 
         function draw() {
@@ -81,11 +236,10 @@
                 }
             }
 
-            var context = document.getElementById('canvas').getContext('2d');
-            context.canvas.width  = window.innerWidth;
+            context.canvas.width = window.innerWidth;
             context.canvas.height = window.innerHeight;
             context.clearRect(0, 0, context.canvas.width, context.canvas.height); // clear canvas  
-            
+
             for (var i = 0; i < totalBeers; i++) {
                 if (!beers[i]) {
                     continue;
@@ -95,15 +249,15 @@
 
                 context.save();
                 context.translate(beers[i].x, beers[i].y);
-                
+
                 context.rotate(rotated);
-            
+
                 context.drawImage(beerImage, -beerWidth, -beerHeight);
                 context.restore();
             }
 
             rotated += degree;
-
+            
             if (rotated < -maxRotate) {
                 degree *= -1;
             }
