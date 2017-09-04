@@ -11,6 +11,11 @@
             /*cursor: url("point.png"), auto;*/
         }
 
+        a {
+            z-index: 25;
+            position: relative;
+        }
+
         .container {
             display: flex;
             align-items: center;
@@ -36,9 +41,10 @@
             display: inline-block;
         }
 
-        img {
-            z-index: -12341341;
+        #canvas {
+            z-index: 5;
         }
+
         .small-marg {
             margin-top: 20px;
         }
@@ -52,11 +58,13 @@
                 <img src="pass.gif" />
             </div>
             <div class="let">A</div><div class="let">n</div><div class="let">d</div><div class="let">y</div>
-            <div class="let">B</div><div class="let">o</div><div class="let">l</div><div class="let">t</div><div class="let">o</div><div class="let">n</div>
-            <div class="smaller link"><a href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
-            <div class="smaller city"><div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div></div>
+            <div class="let">B</div><div class="let">o</div><div class="let">l</div><div class="let">t</div><div class="let">o</div><div class="let">n</div><div class="smaller link">
+            <a href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
+            <div class="smaller city">
+                <div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div>
+            </div>
             <div class="small-marg">
-                <img src="key.gif" width="200" />
+                <img id="keyboard" src="key.gif" width="200" />
             </div>
         </div>
         <canvas id="canvas"></canvas>
@@ -124,10 +132,10 @@
                 rotateHorizontal(link, 0);
             });
 
-            performAnimation();        
+            performAnimation();
         }
 
-        async function performAnimation() { 
+        async function performAnimation() {
             var waitList = [];
 
             for (var i = 0; i < letters.length / 2; i++) {
@@ -137,10 +145,10 @@
                 waitList.push(skew(letterEnd, false));
                 await sleep(500);
             }
-            
+
             Promise.all(waitList).then(() => {
                 rotateHorizontal();
-            });  
+            });
         }
 
         async function skew(letterClass, skewRight) {
@@ -157,7 +165,27 @@
                         xPath = -xPath;
                     }
 
-                    letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
+                    var keyboardLocation = document.getElementById("keyboard");
+                    var boundingRec = keyboardLocation.getBoundingClientRect();
+
+                    var keyX = boundingRec.left;
+                    var keyY = boundingRec.top;
+                    var keyWidth = keyboardLocation.width;
+                    var keyHeight = keyboardLocation.height;
+
+                    var letterBounds = letterClass.getBoundingClientRect();
+                    var letBoundsX = letterBounds.left;
+                    var letBoundsY = letterBounds.top;
+                    
+                    if ((letBoundsX >=  keyX && letBoundsX <= keyX + keyWidth) &&
+                        (letBoundsY > keyY && letBoundsY <= keyY + keyHeight)) {
+                        letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
+                        letterClass.style.color = "white";
+                    } else {
+                        letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
+                        letterClass.style.color = "black";
+                    }
+
                     await sleep(10);
                 }
 
@@ -192,25 +220,30 @@
             });
         }
 
-        async function upDown(cityLetClass, downFirst) {
+        async function upDown(cityLetClass, inPlace) {
             return new Promise(async (resolve) => {
                 var up = 1;
                 var rotate = 11.25;
-                if (downFirst) {
-                    up *= -1;
-                }
-                while (up < 16) {
-                    up++;
-                    rotate += 11.25;
-                    cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 1, 0, ${rotate}deg)`;
-                    await sleep(10);
-                }
-
-                 while (up > 0) {
-                    up--;
-                    rotate += 11.25;
-                    cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 0, 1, ${rotate}deg)`;
-                    await sleep(10);
+                if (inPlace) {
+                    while (up < 32) {
+                        up++;
+                        rotate += 11.25;
+                        cityLetClass.style.transform = `rotate3d(0, 1, 0, ${rotate}deg)`;
+                        await sleep(20);
+                    }
+                } else {
+                    while (up < 16) {
+                        up++;
+                        rotate += 11.25;
+                        cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 1, 0, ${rotate}deg)`;
+                        await sleep(20);
+                    }
+                    while (up > 0) {
+                        up--;
+                        rotate += 11.25;
+                        cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 0, 1, ${rotate}deg)`;
+                        await sleep(20);
+                    }
                 }
 
                 cityLetClass.style.transform = `translate(0px, 0px)`;
@@ -257,7 +290,7 @@
             }
 
             rotated += degree;
-            
+
             if (rotated < -maxRotate) {
                 degree *= -1;
             }
