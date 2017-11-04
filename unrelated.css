@@ -1,4 +1,3 @@
-  @supports (mix-blend-mode: multiply) {
             * {
                 position: relative !important;
                 overflow: hidden !important;
@@ -28,4 +27,3 @@
                 background-blend-mode: screen !important;
                 transform-origin: bottom right !important;
             }
-        }
