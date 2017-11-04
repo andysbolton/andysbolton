@@ -1,12 +1,12 @@
   @supports (mix-blend-mode: multiply) {
-            font {
+            * {
                 position: relative;
                 overflow: hidden;
                 background-color: magenta;
                 background-blend-mode: screen;
             }
-            font:before,
-            font:after {
+            *:before,
+            *:after {
                 display: block;
                 content: "";
                 position: absolute;
@@ -18,12 +18,12 @@
                 mix-blend-mode: multiply;
                 transform: scale(1.05);
             }
-            font:before {
+            *:before {
                 background-color: yellow;
                 background-blend-mode: screen;
                 transform-origin: top left;
             }
-            font:after {
+            *:after {
                 background-color: cyan;
                 background-blend-mode: screen;
                 transform-origin: bottom right;
