@@ -48,6 +48,44 @@
         .small-marg {
             margin-top: 20px;
         }
+
+        .hallucination-effect {
+            background-image: url("key.gif");
+            background-size: cover;
+            background-position: center;
+        }
+
+        @supports (mix-blend-mode: multiply) {
+            .hallucination-effect {
+                position: relative;
+                overflow: hidden;
+                background-color: magenta;
+                background-blend-mode: screen;
+            }
+            .hallucination-effect:before,
+            .hallucination-effect:after {
+                display: block;
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: inherit;
+                mix-blend-mode: multiply;
+                transform: scale(1.05);
+            }
+            .hallucination-effect:before {
+                background-color: yellow;
+                background-blend-mode: screen;
+                transform-origin: top left;
+            }
+            .hallucination-effect:after {
+                background-color: cyan;
+                background-blend-mode: screen;
+                transform-origin: bottom right;
+            }
+        }
     </style>
 </head>
 
@@ -57,15 +95,30 @@
             <div>
                 <img src="pass.gif" />
             </div>
-            <div class="let">A</div><div class="let">n</div><div class="let">d</div><div class="let">y</div>
-            <div class="let">B</div><div class="let">o</div><div class="let">l</div><div class="let">t</div><div class="let">o</div><div class="let">n</div><div class="smaller link">
-            <a href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
+            <div class="let">A</div>
+            <div class="let">n</div>
+            <div class="let">d</div>
+            <div class="let">y</div>
+            <div class="let">B</div>
+            <div class="let">o</div>
+            <div class="let">l</div>
+            <div class="let">t</div>
+            <div class="let">o</div>
+            <div class="let">n</div>
+            <div class="smaller link">
+                <a href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
             <div class="smaller city">
-                <div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div>
+                <div class="city-let">d</div>
+                <div class="city-let">e</div>
+                <div class="city-let">n</div>
+                <div class="city-let">v</div>
+                <div class="city-let">e</div>
+                <div class="city-let">r</div>
             </div>
             <div class="small-marg">
                 <img id="keyboard" src="key.gif" width="200" />
             </div>
+            <div class="hallucination-effect" width="200" height="100"></div>
         </div>
         <canvas id="canvas"></canvas>
     </div>
@@ -176,8 +229,8 @@
                     var letterBounds = letterClass.getBoundingClientRect();
                     var letBoundsX = letterBounds.left;
                     var letBoundsY = letterBounds.top;
-                    
-                    if ((letBoundsX >=  keyX && letBoundsX <= keyX + keyWidth) &&
+
+                    if ((letBoundsX >= keyX && letBoundsX <= keyX + keyWidth) &&
                         (letBoundsY > keyY && letBoundsY <= keyY + keyHeight)) {
                         letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
                         letterClass.style.color = "white";
