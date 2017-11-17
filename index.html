@@ -3,6 +3,8 @@
 
 <head>
     <style>
+          /*@import "https://andysbolton.github.io/allright/unrelated.css";*/
+
         html,
         body {
             width: 100%;
@@ -49,45 +51,19 @@
             margin-top: 20px;
         }
 
+        .hide {
+            display: none;
+        }
+
         .hallucination-effect {
             background-image: url("key.gif");
             background-size: cover;
             background-position: center;
+            height: 100px;
+            width: 200px;
         }
 
-  @supports (mix-blend-mode: multiply) {
-            * {
-                position: relative;
-                overflow: hidden;
-                background-color: magenta;
-                background-blend-mode: screen;
-            }
-            *:before,
-            *:after {
-                display: block;
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: inherit;
-                mix-blend-mode: multiply;
-                transform: scale(1.05);
-            }
-            *:before {
-                background-color: yellow;
-                background-blend-mode: screen;
-                transform-origin: top left;
-            }
-            *:after {
-                background-color: cyan;
-                background-blend-mode: screen;
-                transform-origin: bottom right;
-            }
-        }
-
-        /*@supports (mix-blend-mode: multiply) {
+        @supports (mix-blend-mode: multiply) {
             .hallucination-effect {
                 position: relative;
                 overflow: hidden;
@@ -117,7 +93,7 @@
                 background-blend-mode: screen;
                 transform-origin: bottom right;
             }
-        }*/
+        }
     </style>
 </head>
 
@@ -127,30 +103,17 @@
             <div>
                 <img src="pass.gif" />
             </div>
-            <div class="let">A</div>
-            <div class="let">n</div>
-            <div class="let">d</div>
-            <div class="let">y</div>
-            <div class="let">B</div>
-            <div class="let">o</div>
-            <div class="let">l</div>
-            <div class="let">t</div>
-            <div class="let">o</div>
-            <div class="let">n</div>
+            <div class="let">A</div><div class="let">n</div><div class="let">d</div><div class="let">y</div>
+            <div class="let">B</div><div class="let">o</div><div class="let">l</div><div class="let">t</div><div class="let">o</div><div class="let">n</div>
             <div class="smaller link">
                 <a href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
             <div class="smaller city">
-                <div class="city-let">d</div>
-                <div class="city-let">e</div>
-                <div class="city-let">n</div>
-                <div class="city-let">v</div>
-                <div class="city-let">e</div>
-                <div class="city-let">r</div>
+                <div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div>
             </div>
             <div class="small-marg">
                 <img id="keyboard" src="key.gif" width="200" />
+                <div id="keyboard-other" class="hallucination-effect hide"></div>
             </div>
-            <div class="hallucination-effect" width="200" height="100"></div>
         </div>
         <canvas id="canvas"></canvas>
     </div>
@@ -162,11 +125,13 @@
             this.y = 0;
         }
 
-        var context = document.getElementById('canvas').getContext('2d');
-        var link = document.getElementsByClassName("link")[0];
-        var city = document.getElementsByClassName("city")[0];
-        var letters = document.getElementsByClassName("let");
-        var cityLetters = document.getElementsByClassName("city-let");
+        var context = document.getElementById('canvas').getContext('2d'),
+            link = document.getElementsByClassName("link")[0],
+            city = document.getElementsByClassName("city")[0],
+            letters = document.getElementsByClassName("let"),
+            cityLetters = document.getElementsByClassName("city-let"),
+            key = document.getElementById('keyboard').classList,
+            keyOther = document.getElementById('keyboard-other').classList;
 
         var beers = [];
         var totalBeers = 4;
@@ -206,6 +171,12 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
+        function toggle() {
+            key.toggle('hide');
+            keyOther.toggle('hide');
+            // window.setTimeout(toggle, 4000)
+        }
+
         function init() {
             beerImage.src = 'beer2.png';
             window.requestAnimationFrame(draw);
@@ -216,6 +187,8 @@
             document.addEventListener("nameDone", (e) => {
                 rotateHorizontal(link, 0);
             });
+
+            window.setTimeout(toggle, 4000)
 
             performAnimation();
         }
