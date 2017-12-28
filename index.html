@@ -117,7 +117,8 @@
         </div>
         <canvas id="canvas"></canvas>
     </div>
-    <script type='text/javascript' src='midi.js'></script>
+    <script type='text/javascript' src='player.js'></script>
+    <script type='text/javascript' src='song.js'></script>    
     <script>
         function Beer() {
             this.id = 0;
@@ -175,11 +176,21 @@
         function toggle() {
             key.toggle('hide');
             keyOther.toggle('hide');
-            // window.setTimeout(toggle, 4000)
+            window.setTimeout(toggle, 4000)
         }
 
         function init() {
-            MIDIjs.play('Gerry_Rafferty_-_Baker_Street.mid');
+            // MIDI.Player.currentTime = integer; // time we are at now within the song.
+            // MIDI.Player.endTime = integer; // time when song ends.
+            MIDI.Player.playing = true; // are we playing? yes or no.
+            MIDI.Player.loadFile(song, function() {
+                console.log("k");
+            }
+            ); // load .MIDI from base64 or binary XML request.
+            MIDI.Player.start(); // start the MIDI track (you can put this in the loadFile callback)
+            // MIDI.Player.resume(); // resume the MIDI track from pause.
+            // MIDI.Player.pause(); // pause the MIDI track.
+            // MIDI.Player.stop();
             beerImage.src = 'beer2.png';
             window.requestAnimationFrame(draw);
             document.addEventListener("click", (e) => {
@@ -190,7 +201,7 @@
                 rotateHorizontal(link, 0);
             });
 
-            window.setTimeout(toggle, 4000)
+            //window.setTimeout(toggle, 4000)
 
             performAnimation();
         }
