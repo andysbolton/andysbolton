@@ -183,10 +183,8 @@
         }
 
         function init() {
-            $("#player").midiPlayer({
-   
-                });
-            $("#player").midiPlayer.play(song);
+            var audio = new Audio('BakerStreet.mp3');
+            audio.play();
 
             beerImage.src = 'beer2.png';
             window.requestAnimationFrame(draw);
