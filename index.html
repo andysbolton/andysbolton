@@ -55,23 +55,34 @@
             display: none;
         }
 
-        .hallucination-effect {
+        #keyboard {
             background-image: url("key.gif");
-            background-size: cover;
             background-position: center;
-            height: 100px;
+            background-size: contain;
+            background-repeat: no-repeat;
             width: 200px;
+            height: 109.613px;
+        }
+
+        .what {
+            background-image: url("key.gif");
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 200px;
+            height: 109.613px;
+            z-index: -5;
         }
 
         @supports (mix-blend-mode: multiply) {
-            .hallucination-effect {
+            .what {
                 position: relative;
                 overflow: hidden;
                 background-color: magenta;
                 background-blend-mode: screen;
             }
-            .hallucination-effect:before,
-            .hallucination-effect:after {
+            .what:before,
+            .what:after {
                 display: block;
                 content: "";
                 position: absolute;
@@ -83,12 +94,12 @@
                 mix-blend-mode: multiply;
                 transform: scale(1.05);
             }
-            .hallucination-effect:before {
+            .what:before {
                 background-color: yellow;
                 background-blend-mode: screen;
                 transform-origin: top left;
             }
-            .hallucination-effect:after {
+            .what:after {
                 background-color: cyan;
                 background-blend-mode: screen;
                 transform-origin: bottom right;
@@ -111,17 +122,15 @@
                 <div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div>
             </div>
             <div class="small-marg">
-                <img id="keyboard" src="key.gif" width="200" />
-                <div id="keyboard-other" class="hallucination-effect hide"></div>
+                <img id="keyboard" />
+                <div id="keyboard-other" class="what hide">
+                    <!-- <img src="key.gif" width="200" style="visibility: none"/>                     -->
+                </div>
             </div>
         </div>
         <canvas id="canvas"></canvas>
         <div id="player"></div>
     </div>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>    
-    <script type="text/javascript" src="wildwebmidi.js"></script>
-    <script type="text/javascript" src="midiplayer.js"></script>
-    <script type="text/javascript" src="example-song.js"></script>   
     <script>
         function Beer() {
             this.id = 0;
@@ -168,7 +177,7 @@
             });
 
             if (existingBeer.length) {
-                alert(existingBeer.x);
+                toggle();
             }
         }
 
@@ -179,7 +188,12 @@
         function toggle() {
             key.toggle('hide');
             keyOther.toggle('hide');
-            window.setTimeout(toggle, 4000)
+            window.setTimeout(toggleOff, 4000);
+        }
+
+        function toggleOff() {
+            key.toggle('hide');
+            keyOther.toggle('hide');
         }
 
         function init() {
@@ -195,8 +209,6 @@
             document.addEventListener("nameDone", (e) => {
                 rotateHorizontal(link, 0);
             });
-
-            //window.setTimeout(toggle, 4000)
 
             performAnimation();
         }
@@ -231,13 +243,15 @@
                         xPath = -xPath;
                     }
 
-                    var keyboardLocation = document.getElementById("keyboard");
+                    var keyboardLocation = !document.getElementById("keyboard").classList.contains('hide') ? 
+                                                document.getElementById("keyboard") : 
+                                                document.getElementById("keyboard-other");
                     var boundingRec = keyboardLocation.getBoundingClientRect();
 
                     var keyX = boundingRec.left;
                     var keyY = boundingRec.top;
-                    var keyWidth = keyboardLocation.width;
-                    var keyHeight = keyboardLocation.height;
+                    var keyWidth = boundingRec.width;
+                    var keyHeight = boundingRec.height;
 
                     var letterBounds = letterClass.getBoundingClientRect();
                     var letBoundsX = letterBounds.left;
@@ -245,12 +259,12 @@
 
                     if ((letBoundsX >= keyX && letBoundsX <= keyX + keyWidth) &&
                         (letBoundsY > keyY && letBoundsY <= keyY + keyHeight)) {
-                        letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
                         letterClass.style.color = "white";
                     } else {
-                        letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
                         letterClass.style.color = "black";
                     }
+
+                    letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
 
                     await sleep(10);
                 }
