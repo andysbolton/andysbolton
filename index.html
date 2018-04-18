@@ -221,7 +221,7 @@
                 var letterEnd = letters[letters.length - 1 - i];
                 waitList.push(skew(letterBegin, true));
                 waitList.push(skew(letterEnd, false));
-                await sleep(500);
+                await sleep(10);
             }
 
             Promise.all(waitList).then(() => {
