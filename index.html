@@ -3,8 +3,6 @@
 
 <head>
     <style>
-          /*@import "https://andysbolton.github.io/allright/unrelated.css";*/
-
         html,
         body {
             width: 100%;
@@ -37,6 +35,10 @@
 
         .let {
             display: inline-block;
+        }
+
+        .link {
+            z-index: 10000;
         }
 
         .city-let {
@@ -117,7 +119,7 @@
             <div class="let">A</div><div class="let">n</div><div class="let">d</div><div class="let">y</div>
             <div class="let">B</div><div class="let">o</div><div class="let">l</div><div class="let">t</div><div class="let">o</div><div class="let">n</div>
             <div class="smaller link">
-                <a href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
+                <a target="_blank" href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
             <div class="smaller city">
                 <div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div>
             </div>
@@ -202,9 +204,9 @@
 
             beerImage.src = 'beer2.png';
             window.requestAnimationFrame(draw);
-            document.addEventListener("click", (e) => {
-                getCursorPosition(context.canvas, e);
-            });
+            // document.addEventListener("click", (e) => {
+            //     getCursorPosition(context.canvas, e);
+            // });
 
             document.addEventListener("nameDone", (e) => {
                 rotateHorizontal(link, 0);
@@ -243,8 +245,8 @@
                         xPath = -xPath;
                     }
 
-                    var keyboardLocation = !document.getElementById("keyboard").classList.contains('hide') ? 
-                                                document.getElementById("keyboard") : 
+                    var keyboardLocation = !document.getElementById("keyboard").classList.contains('hide') ?
+                                                document.getElementById("keyboard") :
                                                 document.getElementById("keyboard-other");
                     var boundingRec = keyboardLocation.getBoundingClientRect();
 
@@ -351,7 +353,7 @@
 
             context.canvas.width = window.innerWidth;
             context.canvas.height = window.innerHeight;
-            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // clear canvas  
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // clear canvas
 
             for (var i = 0; i < totalBeers; i++) {
                 if (!beers[i]) {
@@ -379,7 +381,7 @@
                 degree *= -1;
             }
 
-            window.requestAnimationFrame(draw);
+            window.setTimeout(draw, 15);
         }
 
         function getRandomInt(min, max) {
