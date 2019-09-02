@@ -2,396 +2,403 @@
 <html>
 
 <head>
-    <style>
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0px;
-            /*cursor: url("point.png"), auto;*/
-        }
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      /*cursor: url("point.png"), auto;*/
+    }
 
-        a {
-            z-index: 25;
-            position: relative;
-        }
+    a {
+      z-index: 25;
+      position: relative;
+    }
 
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
 
-        .abs {
-            position: absolute;
-        }
+    .abs {
+      position: absolute;
+    }
 
-        .smaller {
-            font-size: .8em;
-        }
+    .smaller {
+      font-size: .8em;
+    }
 
-        .let {
-            display: inline-block;
-        }
+    .let {
+      display: inline-block;
+    }
 
-        .link a {
-            z-index: 10000;
-        }
+    .link a {
+      z-index: 10000;
+    }
 
-        .city-let {
-            display: inline-block;
-        }
+    .city-let {
+      display: inline-block;
+    }
 
-        #canvas {
-            z-index: 5;
-        }
+    #canvas {
+      z-index: 5;
+    }
 
-        .small-marg {
-            margin-top: 20px;
-        }
+    .small-marg {
+      margin-top: 20px;
+    }
 
-        .hide {
-            display: none;
-        }
+    .hide {
+      display: none;
+    }
 
-        #keyboard {
-            background-image: url("key.gif");
-            background-position: center;
-            background-size: contain;
-            background-repeat: no-repeat;
-            width: 200px;
-            height: 109.613px;
-        }
+    #keyboard {
+      background-image: url("assets/key.gif");
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 200px;
+      height: 109.613px;
+    }
 
-        .what {
-            background-image: url("key.gif");
-            background-position: center;
-            background-size: contain;
-            background-repeat: no-repeat;
-            width: 200px;
-            height: 109.613px;
-            z-index: -5;
-        }
+    .what {
+      background-image: url("key.gif");
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 200px;
+      height: 109.613px;
+      z-index: -5;
+    }
 
-        @supports (mix-blend-mode: multiply) {
-            .what {
-                position: relative;
-                overflow: hidden;
-                background-color: magenta;
-                background-blend-mode: screen;
-            }
-            .what:before,
-            .what:after {
-                display: block;
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: inherit;
-                mix-blend-mode: multiply;
-                transform: scale(1.05);
-            }
-            .what:before {
-                background-color: yellow;
-                background-blend-mode: screen;
-                transform-origin: top left;
-            }
-            .what:after {
-                background-color: cyan;
-                background-blend-mode: screen;
-                transform-origin: bottom right;
-            }
-        }
-    </style>
+    @supports (mix-blend-mode: multiply) {
+      .what {
+        position: relative;
+        overflow: hidden;
+        background-color: magenta;
+        background-blend-mode: screen;
+      }
+
+      .what:before,
+      .what:after {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: inherit;
+        mix-blend-mode: multiply;
+        transform: scale(1.05);
+      }
+
+      .what:before {
+        background-color: yellow;
+        background-blend-mode: screen;
+        transform-origin: top left;
+      }
+
+      .what:after {
+        background-color: cyan;
+        background-blend-mode: screen;
+        transform-origin: bottom right;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="abs">
-            <div>
-                <img src="pass.gif" />
-            </div>
-            <div class="let">A</div><div class="let">n</div><div class="let">d</div><div class="let">y</div>
-            <div class="let">B</div><div class="let">o</div><div class="let">l</div><div class="let">t</div><div class="let">o</div><div class="let">n</div>
-            <div class="smaller link">
-                <a target="_blank" href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
-            <div class="smaller city">
-                <div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div>
-            </div>
-            <div class="small-marg">
-                <img id="keyboard" />
-                <div id="keyboard-other" class="what hide">
-                    <!-- <img src="key.gif" width="200" style="visibility: none"/>                     -->
-                </div>
-            </div>
-        </div>
-        <canvas id="canvas"></canvas>
-        <div id="player"></div>
+  <div class="container">
+    <div class="abs">
+      <div>
+        <img src="assets/pass.gif" />
     </div>
-    <script>
-        function Beer() {
-            this.id = 0;
-            this.speedFactor = 0;
-            this.x = 0;
-            this.y = 0;
+      <div class="let">A</div><div class="let">n</div><div class="let">d</div><div class="let">y</div>
+      <div class="let">B</div><div class="let">o</div><div class="let">l</div><div class="let">t</div><div class="let">o</div><div class="let">n</div>
+      <div class="smaller link">
+          <a target="_blank" href="https://www.linkedin.com/in/asbolton">software engineer</a></div>
+      <div class="smaller city">
+          <div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div>
+      </div>
+      <div class="small-marg">
+          <img id="keyboard" />
+          <div id="keyboard-other" class="what hide">
+              <!-- <img src="key.gif" width="200" style="visibility: none"/>                     -->
+          </div>
+      </div>
+      <div class="projects">
+        Projects:
+        <a href="/projects/8080/emulator">Intel 8080 emulator</a>
+      </div>
+    </div>
+    <canvas id="canvas"></canvas>
+    <div id="player"></div>
+  </div>
+  <script>
+    function Beer() {
+      this.id = 0;
+      this.speedFactor = 0;
+      this.x = 0;
+      this.y = 0;
+    }
+
+    var context = document.getElementById('canvas').getContext('2d'),
+      link = document.getElementsByClassName("link")[0],
+      city = document.getElementsByClassName("city")[0],
+      letters = document.getElementsByClassName("let"),
+      cityLetters = document.getElementsByClassName("city-let"),
+      key = document.getElementById('keyboard').classList,
+      keyOther = document.getElementById('keyboard-other').classList;
+
+    var beers = [];
+    var totalBeers = 4;
+    var speedFactors = 6;
+
+    // rotate .33 degrees on draw
+    var degree = .33 * Math.PI / 180;
+    var rotated = degree;
+    // max left/right rotate is 15 degrees
+    var maxRotate = 15 * Math.PI / 180;
+
+    var beerImage = new Image();
+    var beerWidth = 0;
+    var beerHeight = 0;
+
+    beerImage.onload = () => {
+      beerWidth = beerImage.width / 2;
+      beerHeight = beerImage.height / 2;
+    }
+
+    function getCursorPosition(canvas, event) {
+      var rect = canvas.getBoundingClientRect();
+      var x = event.clientX - rect.left;
+      var y = event.clientY - rect.top;
+
+      var existingBeer = beers.filter((s) => {
+        return (s.x >= x - beerWidth && s.x <= x + beerWidth) &&
+          (s.y > y - beerHeight && s.y <= y + beerHeight);
+      });
+
+      if (existingBeer.length) {
+        toggle();
+      }
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function toggle() {
+      key.toggle('hide');
+      keyOther.toggle('hide');
+      window.setTimeout(toggleOff, 4000);
+    }
+
+    function toggleOff() {
+      key.toggle('hide');
+      keyOther.toggle('hide');
+    }
+
+    function init() {
+      // var audio = new Audio('BakerStreet.mp3');
+      // audio.play();
+
+      beerImage.src = 'assets/beer2.png';
+      window.requestAnimationFrame(draw);
+      // document.addEventListener("click", (e) => {
+      //     getCursorPosition(context.canvas, e);
+      // });
+
+      document.addEventListener("nameDone", (e) => {
+        rotateHorizontal(link, 0);
+      });
+
+      performAnimation();
+    }
+
+    async function performAnimation() {
+      var waitList = [];
+
+      for (var i = 0; i < letters.length / 2; i++) {
+        var letterBegin = letters[i];
+        var letterEnd = letters[letters.length - 1 - i];
+        waitList.push(skew(letterBegin, true));
+        waitList.push(skew(letterEnd, false));
+        await sleep(500);
+      }
+
+      Promise.all(waitList).then(() => {
+        rotateHorizontal();
+      });
+    }
+
+    async function skew(letterClass, skewRight) {
+      return new Promise(async (resolve) => {
+        var degrees = 0;
+        while (degrees < 360) {
+          degrees++;
+          var radians = degrees * Math.PI / 180;
+
+          xPath = Math.cos(-radians) * 100 - 100;
+          yPath = Math.sin(-radians) * 200;
+
+          if (skewRight) {
+            xPath = -xPath;
+          }
+
+          var keyboardLocation = !document.getElementById("keyboard").classList.contains('hide') ?
+            document.getElementById("keyboard") :
+            document.getElementById("keyboard-other");
+          var boundingRec = keyboardLocation.getBoundingClientRect();
+
+          var keyX = boundingRec.left;
+          var keyY = boundingRec.top;
+          var keyWidth = boundingRec.width;
+          var keyHeight = boundingRec.height;
+
+          var letterBounds = letterClass.getBoundingClientRect();
+          var letBoundsX = letterBounds.left;
+          var letBoundsY = letterBounds.top;
+
+          if ((letBoundsX >= keyX && letBoundsX <= keyX + keyWidth) &&
+            (letBoundsY > keyY && letBoundsY <= keyY + keyHeight)) {
+            letterClass.style.color = "white";
+          } else {
+            letterClass.style.color = "black";
+          }
+
+          letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
+
+          await sleep(10);
         }
 
-        var context = document.getElementById('canvas').getContext('2d'),
-            link = document.getElementsByClassName("link")[0],
-            city = document.getElementsByClassName("city")[0],
-            letters = document.getElementsByClassName("let"),
-            cityLetters = document.getElementsByClassName("city-let"),
-            key = document.getElementById('keyboard').classList,
-            keyOther = document.getElementById('keyboard-other').classList;
+        letterClass.style.transform = `translate(0px, 0px)`;
+        resolve();
+      });
+    }
 
-        var beers = [];
-        var totalBeers = 4;
-        var speedFactors = 6;
+    async function rotateHorizontal() {
+      var degrees = 0;
+      while (degrees < 360) {
+        degrees++;
 
-        // rotate .33 degrees on draw
-        var degree = .33 * Math.PI / 180;
-        var rotated = degree;
-        // max left/right rotate is 15 degrees
-        var maxRotate = 15 * Math.PI / 180;
+        link.style.transform = `rotate3d(0, 1, 0, ${degrees}deg)`;
+        // skew(${degrees * Math.PI / 180}deg, ${degrees}deg)
+        await sleep(5);
+      }
 
-        var beerImage = new Image();
-        var beerWidth = 0;
-        var beerHeight = 0;
+      var waitList = [];
 
-        beerImage.onload = () => {
-            beerWidth = beerImage.width / 2;
-            beerHeight = beerImage.height / 2;
+      for (var i = 0; i < cityLetters.length; i++) {
+        if (i % 2 === 0) {
+          waitList.push(upDown(cityLetters[i], false));
+        } else {
+          waitList.push(upDown(cityLetters[i], true))
+        }
+        await sleep(250);
+      }
+
+      Promise.all(waitList).then(() => {
+        performAnimation();
+      });
+    }
+
+    async function upDown(cityLetClass, inPlace) {
+      return new Promise(async (resolve) => {
+        var up = 1;
+        var rotate = 11.25;
+        if (inPlace) {
+          while (up < 32) {
+            up++;
+            rotate += 11.25;
+            cityLetClass.style.transform = `rotate3d(0, 1, 0, ${rotate}deg)`;
+            await sleep(20);
+          }
+        } else {
+          while (up < 16) {
+            up++;
+            rotate += 11.25;
+            cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 1, 0, ${rotate}deg)`;
+            await sleep(20);
+          }
+          while (up > 0) {
+            up--;
+            rotate += 11.25;
+            cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 0, 1, ${rotate}deg)`;
+            await sleep(20);
+          }
         }
 
-        function getCursorPosition(canvas, event) {
-            var rect = canvas.getBoundingClientRect();
-            var x = event.clientX - rect.left;
-            var y = event.clientY - rect.top;
+        cityLetClass.style.transform = `translate(0px, 0px)`;
+        resolve();
+      });
+    }
 
-            var existingBeer = beers.filter((s) => {
-                return (s.x >= x - beerWidth && s.x <= x + beerWidth) &&
-                    (s.y > y - beerHeight && s.y <= y + beerHeight);
-            });
+    function draw() {
+      for (var i = 0; i < totalBeers; i++) {
+        if (beers[i] && beers[i].y < -200) {
+          beers.splice(i, 1);
+        }
+        var existingBeer = beers.filter((s) => {
+          return s.id === i;
+        });
+        if (!existingBeer.length) {
+          var beer = new Beer();
+          beer.id = i;
+          beer.speedFactor = getRandomInt(1, speedFactors + 1);
+          beer.x = getRandomInt(1 + beerWidth, window.innerWidth - beerWidth);
+          beer.y = window.innerHeight;
+          beers.push(beer);
+        }
+      }
 
-            if (existingBeer.length) {
-                toggle();
-            }
+      context.canvas.width = window.innerWidth;
+      context.canvas.height = window.innerHeight;
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height); // clear canvas
+
+      for (var i = 0; i < totalBeers; i++) {
+        if (!beers[i]) {
+          continue;
         }
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+        beers[i].y -= beers[i].speedFactor;
 
-        function toggle() {
-            key.toggle('hide');
-            keyOther.toggle('hide');
-            window.setTimeout(toggleOff, 4000);
-        }
+        context.save();
+        context.translate(beers[i].x, beers[i].y);
 
-        function toggleOff() {
-            key.toggle('hide');
-            keyOther.toggle('hide');
-        }
+        context.rotate(rotated);
 
-        function init() {
-            // var audio = new Audio('BakerStreet.mp3');
-            // audio.play();
+        context.drawImage(beerImage, -beerWidth, -beerHeight);
+        context.restore();
+      }
 
-            beerImage.src = 'beer2.png';
-            window.requestAnimationFrame(draw);
-            // document.addEventListener("click", (e) => {
-            //     getCursorPosition(context.canvas, e);
-            // });
+      rotated += degree;
 
-            document.addEventListener("nameDone", (e) => {
-                rotateHorizontal(link, 0);
-            });
+      if (rotated < -maxRotate) {
+        degree *= -1;
+      }
 
-            performAnimation();
-        }
+      if (rotated > maxRotate) {
+        degree *= -1;
+      }
 
-        async function performAnimation() {
-            var waitList = [];
+      window.setTimeout(draw, 15);
+    }
 
-            for (var i = 0; i < letters.length / 2; i++) {
-                var letterBegin = letters[i];
-                var letterEnd = letters[letters.length - 1 - i];
-                waitList.push(skew(letterBegin, true));
-                waitList.push(skew(letterEnd, false));
-                await sleep(500);
-            }
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+    }
 
-            Promise.all(waitList).then(() => {
-                rotateHorizontal();
-            });
-        }
-
-        async function skew(letterClass, skewRight) {
-            return new Promise(async (resolve) => {
-                var degrees = 0;
-                while (degrees < 360) {
-                    degrees++;
-                    var radians = degrees * Math.PI / 180;
-
-                    xPath = Math.cos(-radians) * 100 - 100;
-                    yPath = Math.sin(-radians) * 200;
-
-                    if (skewRight) {
-                        xPath = -xPath;
-                    }
-
-                    var keyboardLocation = !document.getElementById("keyboard").classList.contains('hide') ?
-                                                document.getElementById("keyboard") :
-                                                document.getElementById("keyboard-other");
-                    var boundingRec = keyboardLocation.getBoundingClientRect();
-
-                    var keyX = boundingRec.left;
-                    var keyY = boundingRec.top;
-                    var keyWidth = boundingRec.width;
-                    var keyHeight = boundingRec.height;
-
-                    var letterBounds = letterClass.getBoundingClientRect();
-                    var letBoundsX = letterBounds.left;
-                    var letBoundsY = letterBounds.top;
-
-                    if ((letBoundsX >= keyX && letBoundsX <= keyX + keyWidth) &&
-                        (letBoundsY > keyY && letBoundsY <= keyY + keyHeight)) {
-                        letterClass.style.color = "white";
-                    } else {
-                        letterClass.style.color = "black";
-                    }
-
-                    letterClass.style.transform = `translate(${xPath}px, ${yPath}px) rotate3d(1, 0, 0, ${degrees}deg)`;
-
-                    await sleep(10);
-                }
-
-                letterClass.style.transform = `translate(0px, 0px)`;
-                resolve();
-            });
-        }
-
-        async function rotateHorizontal() {
-            var degrees = 0;
-            while (degrees < 360) {
-                degrees++;
-
-                link.style.transform = `rotate3d(0, 1, 0, ${degrees}deg)`;
-                // skew(${degrees * Math.PI / 180}deg, ${degrees}deg)
-                await sleep(5);
-            }
-
-            var waitList = [];
-
-            for (var i = 0; i < cityLetters.length; i++) {
-                if (i % 2 === 0) {
-                    waitList.push(upDown(cityLetters[i], false));
-                } else {
-                    waitList.push(upDown(cityLetters[i], true))
-                }
-                await sleep(250);
-            }
-
-            Promise.all(waitList).then(() => {
-                performAnimation();
-            });
-        }
-
-        async function upDown(cityLetClass, inPlace) {
-            return new Promise(async (resolve) => {
-                var up = 1;
-                var rotate = 11.25;
-                if (inPlace) {
-                    while (up < 32) {
-                        up++;
-                        rotate += 11.25;
-                        cityLetClass.style.transform = `rotate3d(0, 1, 0, ${rotate}deg)`;
-                        await sleep(20);
-                    }
-                } else {
-                    while (up < 16) {
-                        up++;
-                        rotate += 11.25;
-                        cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 1, 0, ${rotate}deg)`;
-                        await sleep(20);
-                    }
-                    while (up > 0) {
-                        up--;
-                        rotate += 11.25;
-                        cityLetClass.style.transform = `translate(0px, ${up}px) rotate3d(0, 0, 1, ${rotate}deg)`;
-                        await sleep(20);
-                    }
-                }
-
-                cityLetClass.style.transform = `translate(0px, 0px)`;
-                resolve();
-            });
-        }
-
-        function draw() {
-            for (var i = 0; i < totalBeers; i++) {
-                if (beers[i] && beers[i].y < -200) {
-                    beers.splice(i, 1);
-                }
-                var existingBeer = beers.filter((s) => {
-                    return s.id === i;
-                });
-                if (!existingBeer.length) {
-                    var beer = new Beer();
-                    beer.id = i;
-                    beer.speedFactor = getRandomInt(1, speedFactors + 1);
-                    beer.x = getRandomInt(1 + beerWidth, window.innerWidth - beerWidth);
-                    beer.y = window.innerHeight;
-                    beers.push(beer);
-                }
-            }
-
-            context.canvas.width = window.innerWidth;
-            context.canvas.height = window.innerHeight;
-            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // clear canvas
-
-            for (var i = 0; i < totalBeers; i++) {
-                if (!beers[i]) {
-                    continue;
-                }
-
-                beers[i].y -= beers[i].speedFactor;
-
-                context.save();
-                context.translate(beers[i].x, beers[i].y);
-
-                context.rotate(rotated);
-
-                context.drawImage(beerImage, -beerWidth, -beerHeight);
-                context.restore();
-            }
-
-            rotated += degree;
-
-            if (rotated < -maxRotate) {
-                degree *= -1;
-            }
-
-            if (rotated > maxRotate) {
-                degree *= -1;
-            }
-
-            window.setTimeout(draw, 15);
-        }
-
-        function getRandomInt(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-        }
-
-        init();
-    </script>
+    init();
+  </script>
 </body>
 
 </html>
