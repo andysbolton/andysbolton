@@ -37,8 +37,9 @@
       display: inline-block;
     }
 
-    .link a {
-      z-index: 10000;
+    .link {
+      position: relative;
+      z-index: 1000000;
     }
 
     .city-let {
@@ -133,7 +134,7 @@
           </div>
       </div>
       <div class="projects">
-        Projects: <a href="projects/8080/emulator">Intel 8080 emulator</a>
+        Projects: <a target="_blank" href="projects/8080/emulator">Intel 8080 emulator</a>
       </div>
     </div>
     <canvas id="canvas"></canvas>
