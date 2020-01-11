@@ -65,6 +65,7 @@
       background-repeat: no-repeat;
       width: 200px;
       height: 109.613px;
+      margin: 0 auto;
     }
 
     .what {
@@ -75,6 +76,14 @@
       width: 200px;
       height: 109.613px;
       z-index: -5;
+    }
+
+    .align-left {
+      text-align: left;
+    }
+
+    .projects {
+      margin-top: 29px;
     }
 
     @supports (mix-blend-mode: multiply) {
@@ -128,18 +137,26 @@
           <div class="city-let">d</div><div class="city-let">e</div><div class="city-let">n</div><div class="city-let">v</div><div class="city-let">e</div><div class="city-let">r</div>
       </div>
       <div class="small-marg">
-          <img id="keyboard" />
-          <div id="keyboard-other" class="what hide">
-              <!-- <img src="key.gif" width="200" style="visibility: none"/>                     -->
-          </div>
+        <div id="keyboard"></div>
+        <div id="keyboard-other" class="what hide">
+          <!-- <img src="key.gif" width="200" style="visibility: none"/>                     -->
+        </div>
       </div>
-      <div class="projects">
-        Projects: <a target="_blank" href="projects/8080/emulator">Intel 8080 emulator</a>
+      <div class="projects align-left">
+        <span>Projects:</span>
+        <ul>
+          <li>
+            <a target="_blank" href="projects/8080/emulator">Intel 8080 emulator</a>
+          </li>
+          <li>
+            <a target="_blank" href="https://github.com/andysbolton/guarantee">Promise/A+ compliant promise implementation</a>
+          </li>
+        </ul>
       </div>
-    </div>
-    <canvas id="canvas"></canvas>
-    <div id="player"></div>
-  </div>
+      </div>
+      <canvas id="canvas"></canvas>
+      <div id="player"></div>
+      </div>
   <script>
     function Beer() {
       this.id = 0;
@@ -210,14 +227,12 @@
       // audio.play();
 
       beerImage.src = 'assets/beer2.png';
+
       window.requestAnimationFrame(draw);
+
       // document.addEventListener("click", (e) => {
       //     getCursorPosition(context.canvas, e);
       // });
-
-      document.addEventListener("nameDone", (e) => {
-        rotateHorizontal(link, 0);
-      });
 
       performAnimation();
     }
@@ -233,7 +248,9 @@
         await sleep(500);
       }
 
+
       Promise.all(waitList).then(() => {
+        key.add('what');
         rotateHorizontal();
       });
     }
@@ -241,6 +258,9 @@
     async function skew(letterClass, skewRight) {
       return new Promise(async (resolve) => {
         var degrees = 0;
+        var keyboardLocation = document.getElementById("keyboard");
+        var boundingRec = keyboardLocation.getBoundingClientRect();
+
         while (degrees < 360) {
           degrees++;
           var radians = degrees * Math.PI / 180;
@@ -251,11 +271,6 @@
           if (skewRight) {
             xPath = -xPath;
           }
-
-          var keyboardLocation = !document.getElementById("keyboard").classList.contains('hide') ?
-            document.getElementById("keyboard") :
-            document.getElementById("keyboard-other");
-          var boundingRec = keyboardLocation.getBoundingClientRect();
 
           var keyX = boundingRec.left;
           var keyY = boundingRec.top;
@@ -306,6 +321,7 @@
 
       Promise.all(waitList).then(() => {
         performAnimation();
+        key.remove('what');
       });
     }
 
