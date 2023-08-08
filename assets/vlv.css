@@ -1,4 +1,4 @@
-@media (max-width: 1150px){
+@media only screen and (max-width: 1150px){
 	#quicksearch { display:none; }
 
 	.nav { 
@@ -30,7 +30,7 @@
 
 }
 
-@media (max-width: 930px){
+@media only screen and (max-width: 930px){
 	
 	html body {
 		margin: 0;
@@ -106,11 +106,11 @@
 	}	
 }
 
-@media (max-width: 850px){
+@media only screen and (max-width: 850px){
 	.view li { margin:0px; }
 }
 
-@media (max-width: 586px) {
+@media only screen and (max-width: 586px) {
 
 	.nav.top li {
 		margin-left: 0;
@@ -144,7 +144,7 @@
 	.nav.top { min-height: 69px; }
 }
 
-@media (max-width: 380px) {
+@media only screen and (max-width: 380px) {
 	#auth {
 		margin-bottom: 0px;
 	}
